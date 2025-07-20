@@ -21,4 +21,4 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true 
 
 const urlRouter = require('./routers/url');
 app.use('/url', urlRouter);
-app.use('/url:id', urlRouter);
+app.use('/url:shortId', urlRouter);
