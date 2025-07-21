@@ -42,14 +42,22 @@ async function redirectHandler(req, res) {
       { $push: { visitHistory: { visitTime: Date.now() } } },
       { new: true }
     );
-    if (!entry) return res.status(404).json({ message: 'URL not found' });
+    if (!entry) return res.status(404).json({ message: "URL not found" });
     return res.redirect(entry.redirectUrl);
   } catch (err) {
-    console.error('Redirect error:', err);
-    return res.status(500).json({ message: 'Server error' });
+    console.error("Redirect error:", err);
+    return res.status(500).json({ message: "Server error" });
   }
 }
 
-module.exports = { generateShortUrl
-  , redirectHandler
- };
+async function handleGetanalytics(req, res) {
+const { shortid } = req.params;
+const result = await Url.findOne({ shortid });
+return res.json({
+  totalclicks: result.visitHistory.length, analytics:result.visitHistory
+});
+
+
+};
+
+module.exports = { generateShortUrl, redirectHandler , handleGetanalytics };
