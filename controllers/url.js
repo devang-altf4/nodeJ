@@ -1,47 +1,55 @@
-const URL = require('../models/url');
-const shortid = require('shortid');
-const Url = require('../models/url');
+// controllers/urlController.js
+const Url = require("../models/url");
+const shortid = require("shortid");
 
-async function generateShortUrl(req,res){
-    const body= req.body;
-    if(!body.url){
-        return res.status(400).json({error: "Redirect URL is required"});
-    }
-    const shortID = shortid();
-    await Url.create({
-
-        shortid: shortID,
-        redirectUrl: body.url,
-        visitHistory: []
-
-    })
-    return res.status(200).json({shortid: shortID});
- 
-}
-async function getUrlById(req, res) {
+async function generateShortUrl(req, res) {
   try {
-    const { shortID } = req.params;
-
-    const entry = await Url.findOneAndUpdate(
-      { id: shortID }, // query
-      { $push: { visitHistory:{ timestamp: Date.now(), } } }, // update
-      { new: true } // options (optional: return updated doc)
-    );
-
-    if (!entry) {
-      return res.status(404).json({ message: "URL not found" });
+    const { url: redirectUrl } = req.body;
+    if (!redirectUrl) {
+      return res.status(400).json({ error: "Redirect URL is required" });
     }
 
-    res.json(entry);
+    const urlRegex = /^https?:\/\/\S+/i;
+    if (!urlRegex.test(redirectUrl)) {
+      return res.status(400).json({
+        error: "Invalid URL format (must start with http:// or https://)",
+      });
+    }
+
+    const urlCode = shortid.generate();
+    const created = await Url.create({
+      shortid: urlCode,
+      redirectUrl,
+      visitHistory: [],
+    });
+
+    const host = req.get("host");
+    return res.status(201).json({
+      shortid: created.shortid,
+      shortUrl: `http://${host}/${created.shortid}`,
+    });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
+    console.error("generateShortUrl error:", err);
+    return res.status(500).json({ error: "Server error" });
   }
 }
-    
 
+async function redirectHandler(req, res) {
+  try {
+    const { shortid } = req.params;
+    const entry = await Url.findOneAndUpdate(
+      { shortid },
+      { $push: { visitHistory: { visitTime: Date.now() } } },
+      { new: true }
+    );
+    if (!entry) return res.status(404).json({ message: 'URL not found' });
+    return res.redirect(entry.redirectUrl);
+  } catch (err) {
+    console.error('Redirect error:', err);
+    return res.status(500).json({ message: 'Server error' });
+  }
+}
 
-module.exports = {
-  generateShortUrl,
-  getUrlById
-};
+module.exports = { generateShortUrl
+  , redirectHandler
+ };
