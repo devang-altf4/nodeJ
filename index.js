@@ -6,6 +6,8 @@ require("dotenv").config();
 const Url = require("./models/url"); // Ensure the path is correct for your project structure
 const path = require("path");
 const {redirectHandler} = require("./controllers/url");
+const User = require("./models/user"); 
+const userRouter = require("./routers/user");
 
 
 app.set("view engine", "ejs");
@@ -34,5 +36,7 @@ const staticRouter = require("./routers/staticRouter");
 
 app.use("/url", urlRouter);
 app.use("/", staticRouter);
+app.use("/user", userRouter);
 app.get('/:shortid', redirectHandler);
+
 
