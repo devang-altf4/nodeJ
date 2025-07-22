@@ -4,9 +4,11 @@ const PORT = 8000;
 const mongoose = require("mongoose");
 require("dotenv").config();
 const Url = require("./models/url"); // Ensure the path is correct for your project structure
+const path = require("path");
 
 
-
+app.set("view engine", "ejs");
+app.set("views", path.resolve("./views"));
 
 
 app.use(express.json());
