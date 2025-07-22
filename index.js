@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 const Url = require("./models/url"); // Ensure the path is correct for your project structure
 const path = require("path");
+const {redirectHandler} = require("./controllers/url");
 
 
 app.set("view engine", "ejs");
@@ -12,7 +13,7 @@ app.set("views", path.resolve("./views"));
 
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 const MONGODB_URI = process.env.MONGODB_URI;
 
 mongoose
@@ -29,9 +30,9 @@ mongoose
 
 const urlRouter = require("./routers/url");
 const staticRouter = require("./routers/staticRouter");
-const { redirectHandler } = require("./controllers/url");
-app.get('/:shortid', redirectHandler);
+
+
 app.use("/url", urlRouter);
 app.use("/", staticRouter);
-
+app.get('/:shortid', redirectHandler);
 

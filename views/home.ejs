@@ -105,10 +105,17 @@
     </style>
   </head>
   <body>
-   <form method="post" action="/url">
-    <label> Enter Your URL</label>
+     <% if (locals.shortUrl) { %>
+     <div>
+       <h2>Your Short URL: <%= shortUrl %> </h2>
+       
+     </div>
+   <% } %>
+
+   <form method="POST" action="/url">
+    <label>Enter Your URL</label>
     <input type="text" name="urlentered" placeholder="http://example.com" required />
     <button type="submit">Submit</button>
-   </form>
+</form>
   </body>
 </html>

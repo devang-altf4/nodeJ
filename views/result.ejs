@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>URL Shortened - Success</title>
+    <style>
+      /* Copy your existing styles here */
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .result-container {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+      }
+
+      .short-url {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 20px 0;
+        word-break: break-all;
+        font-weight: bold;
+        color: #667eea;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 10px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .copy-btn {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+
+      .home-btn {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="result-container">
+      <h2>✅ URL Shortened Successfully!</h2>
+      
+      <p><strong>Your Short URL:</strong></p>
+      <div class="short-url">
+        <%= shortUrl %>
+      </div>
+      
+      <button onclick="navigator.clipboard.writeText('<%= shortUrl %>')" class="btn copy-btn">
+        📋 Copy Link
+      </button>
+      
+      <a href="/" class="btn home-btn">Create Another URL</a>
+    </div>
+  </body>
+</html>

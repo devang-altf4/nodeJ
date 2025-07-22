@@ -4,7 +4,9 @@ const shortid = require("shortid");
 
 async function generateShortUrl(req, res) {
   try {
-    const { url: redirectUrl } = req.body;
+    console.log("Form data received:", req.body);
+    // Change from req.body.url to req.body.urlentered to match your form
+    const { urlentered: redirectUrl } = req.body;
     if (!redirectUrl) {
       return res.status(400).json({ error: "Redirect URL is required" });
     }
@@ -24,9 +26,13 @@ async function generateShortUrl(req, res) {
     });
 
     const host = req.get("host");
-    return res.status(201).json({
-      shortid: created.shortid,
+    
+    // Render EJS template instead of JSON
+     return res.render('result', {
+      originalUrl: redirectUrl,
       shortUrl: `http://${host}/${created.shortid}`,
+      shortid: created.shortid,
+      success: true
     });
   } catch (err) {
     console.error("generateShortUrl error:", err);
@@ -60,4 +66,6 @@ return res.json({
 
 };
 
-module.exports = { generateShortUrl, redirectHandler , handleGetanalytics };
+module.exports = { generateShortUrl,
+   redirectHandler , 
+   handleGetanalytics };
