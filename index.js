@@ -28,8 +28,10 @@ mongoose
   });
 
 const urlRouter = require("./routers/url");
+const staticRouter = require("./routers/staticRouter");
 const { redirectHandler } = require("./controllers/url");
 app.get('/:shortid', redirectHandler);
 app.use("/url", urlRouter);
+app.use("/", staticRouter);
 
 
