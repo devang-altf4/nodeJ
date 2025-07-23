@@ -1,10 +1,11 @@
 const User = require("../models/user");
-const {v4: uuidv4}= require("uuid")
+const { setUser } = require("../service/auth");
+const { v4: uuidv4 } = require("uuid");
 
 async function handleUserSignup(req, res) {
   const { name, email, password } = req.body;
   await User.create({ name, email, password });
-  return res.render("home");
+  return res.render("login");
 }
 
 async function handleUserLogin(req, res) {
@@ -13,6 +14,9 @@ async function handleUserLogin(req, res) {
   if (!loggedinuser) {
     return res.render("login", { error: "invalid credentials" });
   }
-  return res.render("home", { user: loggedinuser });
+  const sessionId = uuidv4(); // Create session
+  setUser(sessionId, loggedinuser); // Store on serverin map
+  res.cookie("uid", sessionId); // Send to browser
+  return res.redirect("/");
 }
 module.exports = { handleUserSignup, handleUserLogin };
