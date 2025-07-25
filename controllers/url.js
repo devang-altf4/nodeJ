@@ -27,7 +27,7 @@ async function generateShortUrl(req, res) {
 
     const host = req.get("host");
     
-    // Render EJS template instead of JSON
+    
      return res.render('result', {
       originalUrl: redirectUrl,
       shortUrl: `http://${host}/${created.shortid}`,

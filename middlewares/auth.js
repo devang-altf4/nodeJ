@@ -1,5 +1,5 @@
 // Import the getUser function from the auth service module
-const { getUser } = require("../service/auth");
+/*const { getUser } = require("../service/auth");
 
 async function restrictToLoggedInUserOnly(req, res, next) {
   const userUid = req.cookies?.uid;
@@ -14,4 +14,32 @@ async function restrictToLoggedInUserOnly(req, res, next) {
 
   next();
 }
+*/
+const { getUser } = require("../service/auth");
+
+async function restrictToLoggedInUserOnly(req, res, next) {
+    // Extract JWT token from cookies
+    const token = req.cookies.uid;
+    
+    // If no token exists, redirect to login
+    if (!token) return res.redirect("/login");
+    
+    // Verify and decode JWT token
+    const user = getUser(token);
+    
+    // If token is invalid or expired, redirect to login
+    if (!user) {
+        // Clear invalid token cookie
+        res.clearCookie('uid');
+        return res.redirect("/login");
+    }
+    
+    // Attach decoded user data to request
+    req.user = user;
+    
+    // Continue to next middleware/route
+    next();
+}
+
 module.exports = { restrictToLoggedInUserOnly };
+
