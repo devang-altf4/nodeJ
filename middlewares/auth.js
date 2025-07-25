@@ -17,9 +17,11 @@ async function restrictToLoggedInUserOnly(req, res, next) {
 */
 const { getUser } = require("../service/auth");
 
+
 async function restrictToLoggedInUserOnly(req, res, next) {
     // Extract JWT token from cookies
     const token = req.cookies.uid;
+    console.log("Cookie found:", !!token);
     
     // If no token exists, redirect to login
     if (!token) return res.redirect("/login");

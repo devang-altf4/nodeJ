@@ -19,6 +19,7 @@ async function handleUserLogin(req, res) {
   res.cookie("uid", sessionId); // Send to browser  this part to create it in memory using map but issue is that it get refereses when the server restarts.*/
 
   const token = setUser(loggedinuser); // Returns JWT token
+  console.log("Generated token:", token);
     
     // Set JWT token as cookie
     res.cookie("uid", token, {

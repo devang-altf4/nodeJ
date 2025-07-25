@@ -37,9 +37,9 @@ const urlRouter = require("./routers/url");
 const staticRouter = require("./routers/staticRouter");
 
 
-app.use("/url",restrictToLoggedInUserOnly ,urlRouter); // whatever request on /url will go to urlRouter which first will be handled by middleware restrictToLoggedInUserOnly
 app.use("/", staticRouter);
 app.use("/user", userRouter);
+app.use("/url", restrictToLoggedInUserOnly, urlRouter);
 app.get('/:shortid', redirectHandler);
 
 
